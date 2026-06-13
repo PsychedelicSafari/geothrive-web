@@ -93,3 +93,16 @@ export async function afrigisAutocomplete(query: string, maxResults = 5): Promis
 export async function afrigisGeocode(query: string): Promise<unknown> {
   return callService('/geocode/api/v3/address', { query });
 }
+
+/**
+ * Daily weather forecast for a coordinate. Counts against the Weather bucket (1000/month).
+ * station_count=1 pulls the single nearest reporting station.
+ */
+export async function afrigisWeather(lat: number, lng: number, dayCount = 3): Promise<unknown> {
+  return callService('/weather-forecast/v1/getDailyByCoords', {
+    latitude: String(lat),
+    longitude: String(lng),
+    day_count: String(dayCount),
+    station_count: '1',
+  });
+}
