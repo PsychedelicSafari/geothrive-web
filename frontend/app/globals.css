@@ -1,26 +1,174 @@
 @import 'tailwindcss';
+@import 'maplibre-gl/dist/maplibre-gl.css';
 
+/*
+ * Substrate Field Scanner design tokens.
+ * "Miami Vice meets Africa. Eighties funk." Same system as the Psychedelic Safari brand.
+ * Layer 1 = vacation.inc cream editorial base. Layer 2 = neon funk, used as spice not main course.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Layer 1: vacation.inc cream base */
+  --vac-cream: #f5f2e9;
+  --vac-cream-warm: #ebe6db;
+  --vac-paper: #faf7ee;
+  --vac-mint: #b8d4c8;
+  --vac-mint-soft: #d4e3da;
+  --vac-mustard: #f3d87c;
+  --vac-mustard-deep: #e9c85a;
+  --vac-navy: #1e3a5f;
+  --vac-navy-deep: #152a45;
+  --vac-ink: #1a1917;
+  --vac-ink-soft: #3d3a35;
+  --vac-muted: #5c5850;
+
+  /* Layer 2: Miami Vice neon funk */
+  --neon-pink: #ff3e7f;
+  --neon-pink-deep: #e01a5f;
+  --neon-cyan: #24e6d0;
+  --neon-cyan-deep: #0fb8a8;
+  --neon-violet: #6a2cb5;
+  --sunset-orange: #ff7a2a;
+  --sunset-magenta: #c23b78;
+
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-cream: var(--vac-cream);
+  --color-cream-warm: var(--vac-cream-warm);
+  --color-paper: var(--vac-paper);
+  --color-mint: var(--vac-mint);
+  --color-mint-soft: var(--vac-mint-soft);
+  --color-mustard: var(--vac-mustard);
+  --color-mustard-deep: var(--vac-mustard-deep);
+  --color-navy: var(--vac-navy);
+  --color-navy-deep: var(--vac-navy-deep);
+  --color-ink: var(--vac-ink);
+  --color-ink-soft: var(--vac-ink-soft);
+  --color-muted: var(--vac-muted);
+  --color-pink: var(--neon-pink);
+  --color-pink-deep: var(--neon-pink-deep);
+  --color-cyan: var(--neon-cyan);
+  --color-cyan-deep: var(--neon-cyan-deep);
+  --color-violet: var(--neon-violet);
+  --color-sunset-orange: var(--sunset-orange);
+  --color-sunset-magenta: var(--sunset-magenta);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
+  --font-editorial: var(--font-eb-garamond), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 7px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--vac-navy-deep);
+  color: var(--vac-cream);
+  font-family: var(--font-editorial);
+}
+
+/* Chrome-text gradient for the hero. White into mint into cyan into pink. */
+.text-chrome {
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    var(--vac-mint) 38%,
+    var(--neon-cyan) 64%,
+    var(--neon-pink) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.text-glow-cyan {
+  text-shadow:
+    0 0 18px rgba(36, 230, 208, 0.55),
+    0 0 38px rgba(36, 230, 208, 0.25);
+}
+
+.text-glow-pink {
+  text-shadow:
+    0 0 18px rgba(255, 62, 127, 0.55),
+    0 0 38px rgba(255, 62, 127, 0.25);
+}
+
+/* Sunset wash behind the hero. Orange into pink into violet, layered over navy-deep. */
+.sunset-wash {
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(255, 122, 42, 0.42) 0%, transparent 55%),
+    radial-gradient(90% 70% at 80% 10%, rgba(255, 62, 127, 0.38) 0%, transparent 60%),
+    radial-gradient(100% 90% at 15% 0%, rgba(106, 44, 181, 0.5) 0%, transparent 65%),
+    var(--vac-navy-deep);
+}
+
+/* CRT scanlines, faint. */
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.08) 0px,
+    rgba(0, 0, 0, 0.08) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+
+/* The psychedelic filter on the OSM raster basemap. Pushes hue toward the brand sunset. */
+.map-psychedelic .maplibregl-canvas {
+  filter: saturate(1.5) hue-rotate(-18deg) contrast(1.05);
+}
+
+.neon-card {
+  background: rgba(21, 42, 69, 0.72);
+  border: 1px solid rgba(36, 230, 208, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(255, 62, 127, 0.12),
+    0 18px 50px -18px rgba(255, 62, 127, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+@keyframes pulse-marker {
+  0% {
+    box-shadow:
+      0 0 0 0 rgba(255, 62, 127, 0.55),
+      0 0 12px 2px rgba(255, 62, 127, 0.6);
+  }
+  70% {
+    box-shadow:
+      0 0 0 16px rgba(255, 62, 127, 0),
+      0 0 12px 2px rgba(255, 62, 127, 0.6);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(255, 62, 127, 0),
+      0 0 12px 2px rgba(255, 62, 127, 0.6);
+  }
+}
+
+.map-marker {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--neon-pink);
+  border: 2px solid #ffffff;
+  animation: pulse-marker 2s var(--ease-out) infinite;
 }
