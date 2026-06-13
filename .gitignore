@@ -1,0 +1,13 @@
+# OS junk
+.DS_Store
+
+# Editor
+*.swp
+
+# Vercel
+.vercel
+
+# Secrets (the app's real env lives in frontend/.env.local, never committed)
+.env
+.env.*
+!.env.example

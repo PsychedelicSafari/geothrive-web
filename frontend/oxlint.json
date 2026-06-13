@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "react-hooks", "jsx-a11y", "unicorn"],
+  "env": {
+    "browser": true
+  },
+  "globals": {
+    "React": "readonly"
+  },
+  "rules": {
+    "no-unused-vars": "warn",
+    "no-console": "warn",
+    "eqeqeq": "error",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/jsx-no-target-blank": "error",
+    "react/no-children-prop": "error",
+    "jsx-a11y/anchor-is-valid": "off"
+  },
+  "ignorePatterns": ["dist", "node_modules", ".next"]
+}
