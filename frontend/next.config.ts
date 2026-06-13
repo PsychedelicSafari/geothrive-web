@@ -8,8 +8,6 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.join(__dirname),
   },
-  // Avoid workspace-root inference for output file tracing for the same reason.
-  outputFileTracingRoot: path.join(__dirname),
 };
 
 export default nextConfig;
