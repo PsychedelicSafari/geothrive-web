@@ -1,0 +1,43 @@
+{
+  "deploy_target": "vercel",
+  "git_remote": "git@github.com:PsychedelicSafari/geothrive-web.git",
+  "vercel_project": "geothrive-web",
+  "vercel_project_id": "prj_gjp55JBFcejSVLJVSKrQgKeK8J3E",
+  "vercel_org_id": "team_26yB85UqDfZk60QVxoU8AbXr",
+  "vercel_scope": "david-foxpowells-projects",
+  "production_url": "https://geothrive-web.vercel.app",
+  "domain": "none",
+  "milestones": {
+    "M01": {
+      "milestone": "M01",
+      "status": "complete",
+      "note": "Fresh scaffold (no Lovable export). Next.js 16 + Bun + Tailwind 4 + React 19 at frontend/. turbopack.root pinned.",
+      "commit_sha": "3e7ac92",
+      "ts": "2026-06-13T14:10:00Z"
+    },
+    "M02": {
+      "milestone": "M02",
+      "status": "complete",
+      "note": "oxfmt/oxlint/knip/tsgo tooling + scripts. Devcontainer/Postgres deferred (no DB feature yet).",
+      "commit_sha": "3e7ac92",
+      "ts": "2026-06-13T14:10:00Z"
+    },
+    "M03": {
+      "milestone": "M03",
+      "status": "complete",
+      "note": "CI workflow at repo root, working-directory: frontend, bun, format/lint/typecheck/knip/build.",
+      "commit_sha": "3e7ac92",
+      "pr_url": "https://github.com/PsychedelicSafari/geothrive-web/pull/1",
+      "ts": "2026-06-13T14:12:00Z"
+    },
+    "M04a": {
+      "milestone": "M04a",
+      "status": "complete",
+      "note": "Vercel project created via API (rootDirectory=frontend, framework=nextjs). GitHub integration linked for preview+prod deploys. GH secrets wired. Dropped outputFileTracingRoot override (caused ENOENT .next/package.json on Vercel).",
+      "commit_sha": "2cb1de9",
+      "pr_url": "https://github.com/PsychedelicSafari/geothrive-web/pull/1",
+      "production_url": "https://geothrive-web.vercel.app",
+      "ts": "2026-06-13T14:13:00Z"
+    }
+  }
+}
