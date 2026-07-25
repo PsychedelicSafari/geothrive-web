@@ -1,62 +1,97 @@
-# Substrate (geothrive-web)
+# Substrate / GeoThrive Web
 
-Frontend for **Substrate**, a geospatial caching layer.
+Frontend for **Substrate**, a South Africa geospatial field scanner for the
+GeoThrive workstream.
 
-## What this is
+## Current State
 
-The app is a Next.js (App Router, TypeScript) frontend that renders a map and
-queries geospatial data through a **cache**, not the live upstream API.
+The app is a Next.js App Router frontend in `frontend/`. It currently ships a
+MapLibre field-scanner experience:
 
-### Data layer
+- Search a South African address through AfriGIS geocoding.
+- Drop the selected result on an OpenStreetMap basemap.
+- Fetch a three-day forecast from the nearest AfriGIS weather station.
+- Keep all credentials server-side through Next.js route handlers.
 
-- **AfriGIS** is the upstream geospatial data source.
-- A **PostGIS**-backed cache wraps AfriGIS and is indexed by **H3** hexagonal
-  grid cells. The frontend reads from this cache for fast, bounded queries.
-- The frontend never calls the live AfriGIS API directly. It talks to the
-  cache, which is responsible for refreshing from AfriGIS.
+The long-term production shape is still cache-backed: AfriGIS remains the
+upstream source, while a PostGIS cache indexed by H3 cells should sit in front
+of live AfriGIS calls before real traffic is introduced.
 
-No map feature is implemented yet. This repo is the clean scaffold (Next.js
-app, tooling, CI, Vercel link). Map rendering and cache queries land in later
-milestones.
+## Repo Layout
 
-## Repo layout
-
-This repo is a monorepo. The deployable Next.js app lives in `frontend/`
-(the Vercel root directory). The repo root holds CI config, this README, and
-deploy config.
-
-```
+```text
 .
-├── frontend/            # Next.js app (Vercel root directory)
-│   ├── app/             # App Router pages
-│   ├── .env.example     # AfriGIS placeholders (real .env is local, gitignored)
-│   ├── oxlint.json      # linter
-│   ├── .oxfmtrc.json    # formatter
-│   ├── knip.json        # unused-dep checker
-│   └── next.config.ts
-└── .github/workflows/   # CI
+|-- frontend/              # Deployable Next.js app; Vercel root directory
+|   |-- app/               # App Router pages, components, and API routes
+|   |-- lib/               # Server-side AfriGIS client
+|   |-- .env.example       # Placeholder AfriGIS env vars
+|   |-- bun.lock           # Bun lockfile
+|   |-- oxlint.json        # Lint config
+|   |-- .oxfmtrc.json      # Format config
+|   |-- knip.json          # Unused dependency config
+|   `-- next.config.ts
+|-- .github/workflows/     # CI
+|-- .setup-state.json      # Setup and deployment milestone ledger
+|-- docs/                  # Delivery and deployment planning notes
+`-- vercel.json            # Vercel project metadata/config hint
 ```
 
-## Local development
+## Local Development
 
 ```bash
 cd frontend
-bun install
-cp .env.example .env.local   # then fill in real AfriGIS credentials
-bun run dev                  # http://localhost:3000
+bun install --frozen-lockfile
+cp .env.example .env.local
+bun run dev
 ```
 
-## Tooling
+Open `http://localhost:3000`.
 
-- Package manager: **Bun** (never npm/pnpm/yarn).
-- Format: `bun run format` / `bun run format:fix` (oxfmt).
-- Lint: `bun run lint` / `bun run lint:fix` (oxlint, no ESLint).
-- Typecheck: `bun run typecheck` (tsgo).
-- Unused deps: `bun run knip`.
-- Build: `bun run build`.
+Required local and Vercel env vars:
 
-## Deploy
+- `AFRIGIS_CLIENT_ID`
+- `AFRIGIS_CLIENT_SECRET`
+- `AFRIGIS_API_KEY`
 
-Vercel. Project root directory is `frontend`, framework preset `nextjs`.
-Preview deploys run on every PR via the GitHub integration. No custom domain
-assigned yet.
+`AFRIGIS_CLIENT_NAME` is documented for humans, but the current client only
+requires the three values above at runtime.
+
+## Quality Gates
+
+Run these from `frontend/` before opening or merging a change:
+
+```bash
+bun run format
+bun run lint
+bun run typecheck
+bun run knip
+bun run build
+```
+
+CI runs the same gates on pull requests and pushes to `main`.
+
+## Deployment
+
+Deployment target: Vercel.
+
+- Vercel project: `geothrive-web`
+- Vercel root directory: `frontend`
+- Production URL: `https://geothrive-web.vercel.app`
+- Package manager: Bun
+- Install command: `bun install --frozen-lockfile`
+- Build command: `bun run build`
+
+Preview deploys should come from pull requests. Production deploys should come
+from merges to `main` after CI and preview smoke checks pass.
+
+## Phased Delivery Workflow
+
+Use `docs/phased-delivery-plan.md` as the working sequence for upcoming code
+and deployment changes. The short version:
+
+1. Sync `main` and create a scoped branch.
+2. Make one logical change per phase.
+3. Run the quality gates locally.
+4. Push the branch and review the Vercel preview.
+5. Merge to `main` only after preview smoke checks pass.
+6. Verify production and update `.setup-state.json` when a milestone lands.

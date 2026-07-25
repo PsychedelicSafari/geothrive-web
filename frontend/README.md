@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GeoThrive Frontend
 
-## Getting Started
+Next.js 16 App Router frontend for the Substrate / GeoThrive field scanner.
 
-First, run the development server:
+## What Runs Here
+
+- `app/page.tsx` renders the field-scanner shell.
+- `app/components/Explorer.tsx` owns the address search, map, marker, and
+  weather report UI.
+- `app/api/afrigis/*/route.ts` keeps AfriGIS calls server-side.
+- `lib/afrigis.ts` handles AfriGIS OAuth token creation, token caching, and
+  service requests.
+
+The current app calls AfriGIS directly through server routes. Before production
+traffic, move metered geocode/weather reads behind the planned PostGIS + H3
+cache.
+
+## Commands
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install --frozen-lockfile
+bun run dev
+bun run format
+bun run lint
+bun run typecheck
+bun run knip
+bun run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Use Bun only. Do not use npm, pnpm, or yarn.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create `.env.local` from `.env.example`:
 
-## Learn More
+```bash
+cp .env.example .env.local
+```
 
-To learn more about Next.js, take a look at the following resources:
+Fill in:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `AFRIGIS_CLIENT_ID`
+- `AFRIGIS_CLIENT_SECRET`
+- `AFRIGIS_API_KEY`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Never commit real env files.
 
-## Deploy on Vercel
+## Deployment Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Vercel should use this directory as the project root:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Framework preset: Next.js
+- Install command: `bun install --frozen-lockfile`
+- Build command: `bun run build`
+
+The root repository README contains the broader delivery workflow and production
+release sequence.

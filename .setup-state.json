@@ -38,6 +38,15 @@
       "pr_url": "https://github.com/PsychedelicSafari/geothrive-web/pull/1",
       "production_url": "https://geothrive-web.vercel.app",
       "ts": "2026-06-13T14:13:00Z"
+    },
+    "M05": {
+      "milestone": "M05",
+      "status": "complete",
+      "note": "AfriGIS field scanner added with live geocode, MapLibre map marker, and nearest-station weather forecast routes.",
+      "commit_sha": "ae4ffa251933e4260fa3ae0b1e7f9b0719d3c246",
+      "pr_url": "https://github.com/PsychedelicSafari/geothrive-web/pull/4",
+      "production_url": "https://geothrive-web.vercel.app",
+      "ts": "2026-06-13T14:46:32Z"
     }
   }
 }
