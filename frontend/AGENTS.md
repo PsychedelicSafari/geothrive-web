@@ -6,9 +6,9 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 <!-- END:nextjs-agent-rules -->
 
-## Substrate frontend
+## GeoThrive frontend
 
-This is the frontend for Substrate, a geospatial caching layer. It renders a
+This is the frontend for GeoThrive, a geospatial caching layer. It renders a
 map and queries a PostGIS-backed cache (indexed by H3 hex grids) that wraps
 AfriGIS. The frontend talks to the cache, never the live AfriGIS API directly.
 
