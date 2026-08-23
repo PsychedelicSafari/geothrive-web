@@ -221,7 +221,7 @@ export default function Explorer(): React.ReactElement {
           <p className="eyebrow text-cyan text-glow-cyan mb-3">Field Report</p>
           {!selected && (
             <div className="neon-card rounded-2xl p-6 text-muted font-editorial">
-              Pick an address and Substrate pulls live coordinates plus a three-day forecast from
+              Pick an address and GeoThrive pulls live coordinates plus a three-day forecast from
               the nearest weather station. Every lookup is one AfriGIS call, which is exactly why
               the cache exists.
             </div>

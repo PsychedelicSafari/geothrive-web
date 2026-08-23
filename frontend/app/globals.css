@@ -2,7 +2,7 @@
 @import 'maplibre-gl/dist/maplibre-gl.css';
 
 /*
- * Substrate Field Scanner design tokens.
+ * GeoThrive design tokens.
  * "Miami Vice meets Africa. Eighties funk." Same system as the Psychedelic Safari brand.
  * Layer 1 = vacation.inc cream editorial base. Layer 2 = neon funk, used as spice not main course.
  */
@@ -135,6 +135,35 @@ body {
 /* The psychedelic filter on the OSM raster basemap. Pushes hue toward the brand sunset. */
 .map-psychedelic .maplibregl-canvas {
   filter: saturate(1.5) hue-rotate(-18deg) contrast(1.05);
+}
+
+/*
+ * The grid map gets no CSS filter at all. MapLibre draws the basemap and the hexagons into the
+ * SAME canvas, so a filter here would drain Kesh's red ramp along with the map underneath it,
+ * and on a choropleth the colour IS the reading. The basemap is dimmed on the raster layer's
+ * own paint properties instead, in GridExplorer.
+ */
+
+.map-grid .maplibregl-ctrl-group {
+  background: rgba(21, 42, 69, 0.9);
+  border: 1px solid rgba(36, 230, 208, 0.3);
+}
+
+.map-grid .maplibregl-ctrl-group button + button {
+  border-top-color: rgba(36, 230, 208, 0.2);
+}
+
+.map-grid .maplibregl-ctrl-group button span {
+  filter: invert(1);
+}
+
+.corridor-pin {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--neon-cyan);
+  border: 2px solid var(--vac-navy-deep);
+  box-shadow: 0 0 12px 2px rgba(36, 230, 208, 0.7);
 }
 
 .neon-card {

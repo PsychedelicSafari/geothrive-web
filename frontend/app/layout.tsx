@@ -19,9 +19,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Substrate Field Scanner',
+  title: 'GeoThrive',
   description:
-    'A geospatial field scanner for South Africa. Live address search, geocoding, and weather, wired straight into AfriGIS.',
+    'South Africa cut into 34,000 hexagons and weighed against forty layers of conservation, water, terrain and land use. Plus live address search and weather via AfriGIS.',
 };
 
 export default function RootLayout({
