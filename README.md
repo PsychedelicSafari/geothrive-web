@@ -57,6 +57,19 @@ bun run dev                  # http://localhost:3000
 
 ## Deploy
 
-Vercel. Project root directory is `frontend`, framework preset `nextjs`.
-Preview deploys run on every PR via the GitHub integration. No custom domain
-assigned yet.
+Vercel, project `geothrive-web` in the `psychedelic-safari` team. Root
+directory is `frontend`, framework preset `nextjs`. Push to `main` deploys to
+production. Every PR gets a preview URL through the GitHub integration.
+
+Serves `geothrive.psychedelicsafari.guide`.
+
+## Where this repo lives
+
+This repo is public on purpose. Vercel only checks the commit author on private
+repos, so a private repo here would block every push from anyone who is not the
+Vercel account owner. Public means both of us can push and it just deploys, with
+previews, at no cost.
+
+The app code is public. The research, context and notes are not. Those live in
+the private `PsychedelicSafari/geothrive` repo, which clones this one into
+`apps/web`. Work on the app here. Nothing sensitive belongs in this repo.
