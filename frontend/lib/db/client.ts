@@ -16,11 +16,12 @@
  * Module-scope, not per-request. Instances are reused between invocations, so the socket
  * survives a warm start and most requests skip the TLS handshake entirely.
  *
- * The fourth setting is not in this file. `vercel.json` pins functions to `fra1`, because the
- * database is in eu-central-1 and this module is now the thing that talks to it. Left on the
- * default us-east-1, every round trip below pays an Atlantic crossing, which spends the whole
- * latency budget on geography. That was free when a service in Amsterdam did the querying and
- * this app made one HTTP call; it is not free now.
+ * The fourth setting is not in this file. `vercel.json` pins functions to `cpt1`, Cape Town,
+ * because that is where the people using this app are. Every query below then crosses to the
+ * database in eu-central-1 and back, roughly 160ms of it, so a route that runs three queries
+ * spends about half a second on geography alone. Moving the Supabase project to af-south-1
+ * removes that, and is the only thing that will. Until then the choice is which hop to pay
+ * for, the user's or the database's, and the user's is the one worth optimising.
  *
  * Note what is NOT set here: search_path and default_transaction_read_only. Supavisor drops
  * the `options` startup parameter without erroring, so anything set that way is silently
