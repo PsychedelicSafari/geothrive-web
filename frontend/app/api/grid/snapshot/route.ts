@@ -19,7 +19,9 @@ export async function GET(request: Request): Promise<NextResponse> {
   }
 
   try {
-    return NextResponse.json(await gridSnapshot(Number(lat), Number(lng), resolution));
+    return NextResponse.json(await gridSnapshot(Number(lat), Number(lng), resolution), {
+      headers: { 'Cache-Control': 's-maxage=300, stale-while-revalidate=600' },
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json({ error: message }, { status: 502 });
