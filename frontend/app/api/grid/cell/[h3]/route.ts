@@ -11,7 +11,9 @@ export async function GET(
   const { h3 } = await context.params;
 
   try {
-    return NextResponse.json(await gridCell(h3));
+    return NextResponse.json(await gridCell(h3), {
+      headers: { 'Cache-Control': 's-maxage=300, stale-while-revalidate=600' },
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
     const status = message.includes('404') ? 404 : 502;

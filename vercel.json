@@ -1,6 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
+  "//regions": [
+    "The grid database is in Supabase eu-central-1. Every route under /api/grid is now a query",
+    "against it rather than a call to a service that sat next to it, so the function has to be",
+    "the thing that is close. Left on the default us-east-1 each request pays an Atlantic",
+    "crossing per round trip, which is the whole latency budget spent on geography."
+  ],
+  "regions": ["fra1"],
   "buildCommand": "bun run build",
   "installCommand": "bun install --frozen-lockfile"
 }

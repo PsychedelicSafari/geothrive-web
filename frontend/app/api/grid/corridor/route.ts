@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { gridCellAt } from '@/lib/geothrive';
+import { latLngToCell } from 'h3-js';
+import { gridCellsByIndex } from '@/lib/geothrive';
 
 // The profile along a route. Kesh's most-repeated ask, in his words: "my safari starts at
 // point A, it ends at point B and I'm going across ... give me the information along the way".
@@ -54,12 +55,8 @@ function parsePoint(raw: string | null, name: string): [number, number] {
   return [parts[0], parts[1]];
 }
 
-type CellLike = {
-  h3: string;
-  region: string | null;
-  centroid: [number, number];
-  scores?: unknown[];
-};
+/** Resolution the real grid is built at. */
+const RESOLUTION = 6;
 
 export async function GET(request: Request): Promise<NextResponse> {
   const params = new URL(request.url).searchParams;
@@ -79,10 +76,10 @@ export async function GET(request: Request): Promise<NextResponse> {
     interpolate(from, to, i / (samples - 1)),
   );
 
-  // Concurrent, but the whole route is one upstream burst so keep it modest.
-  const results = await Promise.allSettled(
-    points.map(([lng, lat]) => gridCellAt(lat, lng) as Promise<CellLike>),
-  );
+  // Indexes first, then one query. Sampling produces far more points than distinct hexagons,
+  // so deduplicating before the database sees them is most of the saving.
+  const sampled = points.map(([lng, lat]) => latLngToCell(lat, lng, RESOLUTION));
+  const cells = await gridCellsByIndex([...new Set(sampled)]);
 
   const seen = new Set<string>();
   const legs: Array<{
@@ -93,24 +90,24 @@ export async function GET(request: Request): Promise<NextResponse> {
     tag: string | null;
     atKm: number;
   }> = [];
+  let missed = 0;
 
-  results.forEach((result, index) => {
-    if (result.status !== 'fulfilled') return;
-    const cell = result.value;
-    if (!cell?.h3 || seen.has(cell.h3)) return;
-    seen.add(cell.h3);
+  sampled.forEach((index, position) => {
+    const cell = cells.get(index);
+    if (!cell) {
+      missed += 1;
+      return;
+    }
+    if (seen.has(index)) return;
+    seen.add(index);
 
-    const first = (cell.scores?.[0] ?? null) as {
-      score?: number;
-      components?: { tag?: string };
-    } | null;
     legs.push({
       h3: cell.h3,
-      region: cell.region ?? null,
+      region: cell.region,
       centroid: cell.centroid,
-      score: first?.score ?? null,
-      tag: first?.components?.tag ?? null,
-      atKm: Math.round((distanceKm * index) / (samples - 1)),
+      score: cell.score,
+      tag: cell.tag,
+      atKm: Math.round((distanceKm * position) / (samples - 1)),
     });
   });
 
@@ -121,7 +118,7 @@ export async function GET(request: Request): Promise<NextResponse> {
     to,
     distanceKm: Math.round(distanceKm),
     sampled: samples,
-    missed: results.filter((r) => r.status === 'rejected').length,
+    missed,
     cells: legs,
     meanScore: scored.length ? scored.reduce((a, b) => a + b, 0) / scored.length : null,
     bestCell: legs.reduce<(typeof legs)[number] | null>(
