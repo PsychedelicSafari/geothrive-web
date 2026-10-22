@@ -418,7 +418,7 @@ export default function GridExplorer(): React.ReactElement {
             <div className="flex items-baseline justify-between mb-3">
               <p className="eyebrow text-cyan/80">Weight score</p>
               <p className="font-mono text-[0.7rem] text-muted">
-                {count.toLocaleString()} hexagons in view
+                {count.toLocaleString('en-ZA')} hexagons in view
               </p>
             </div>
             <ul className="space-y-1.5">
@@ -431,7 +431,7 @@ export default function GridExplorer(): React.ReactElement {
                   <span className="font-editorial text-sm text-cream/90">{t.label}</span>
                   <span className="font-mono text-[0.65rem] text-muted ml-auto shrink-0">
                     {t.id === 0 ? '<' : '≥'} {t.id === 0 ? TIERS[3].min : t.min} ·{' '}
-                    {t.cells.toLocaleString()}
+                    {t.cells.toLocaleString('en-ZA')}
                   </span>
                 </li>
               ))}

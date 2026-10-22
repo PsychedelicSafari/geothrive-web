@@ -1,0 +1,2 @@
+# Keep frontend formatting consistent between Windows development and Linux CI.
+frontend/** text=auto eol=lf
