@@ -12,8 +12,10 @@ export async function GET(request: Request): Promise<NextResponse> {
   try {
     const result = await afrigisAutocomplete(query);
     return NextResponse.json(result);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ error: message }, { status: 502 });
+  } catch {
+    return NextResponse.json(
+      { error: 'Address search is temporarily unavailable.' },
+      { status: 502, headers: { 'Cache-Control': 'no-store' } },
+    );
   }
 }

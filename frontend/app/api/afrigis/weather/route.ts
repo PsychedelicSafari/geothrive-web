@@ -81,8 +81,10 @@ export async function GET(request: Request): Promise<NextResponse> {
     };
 
     return NextResponse.json(trimmed);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ error: message }, { status: 502 });
+  } catch {
+    return NextResponse.json(
+      { error: 'Weather is temporarily unavailable.' },
+      { status: 502, headers: { 'Cache-Control': 'no-store' } },
+    );
   }
 }

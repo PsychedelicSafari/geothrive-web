@@ -22,8 +22,10 @@ export async function GET(request: Request): Promise<NextResponse> {
     return NextResponse.json(await gridSnapshot(Number(lat), Number(lng), resolution), {
       headers: { 'Cache-Control': 's-maxage=300, stale-while-revalidate=600' },
     });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ error: message }, { status: 502 });
+  } catch {
+    return NextResponse.json(
+      { error: 'Map data is temporarily unavailable.' },
+      { status: 502, headers: { 'Cache-Control': 'no-store' } },
+    );
   }
 }
