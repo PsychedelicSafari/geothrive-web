@@ -15,8 +15,10 @@ export async function GET(
       headers: { 'Cache-Control': 's-maxage=300, stale-while-revalidate=600' },
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    const status = message.includes('404') ? 404 : 502;
-    return NextResponse.json({ error: message }, { status });
+    const missing = error instanceof Error && error.name === 'NotInGrid';
+    return NextResponse.json(
+      { error: missing ? 'Cell not found.' : 'Map data is temporarily unavailable.' },
+      { status: missing ? 404 : 502, headers: { 'Cache-Control': 'no-store' } },
+    );
   }
 }

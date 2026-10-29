@@ -23,7 +23,7 @@ const TIER_RANK: Record<string, number> = { [BASIC]: 0, [STANDARD]: 1, [ENTERPRI
 
 /** Numeric rank for a tier name. Unknown names sort as the most restrictive, not the least. */
 function rank(tier: string): number {
-  return TIER_RANK[tier] ?? Math.max(...Object.values(TIER_RANK));
+  return Object.hasOwn(TIER_RANK, tier) ? TIER_RANK[tier] : TIER_RANK[BASIC];
 }
 
 /** Every tier name a caller at `tier` is allowed to read. Becomes an IN clause. */
@@ -35,5 +35,5 @@ export function visibleTiers(tier: string): string[] {
 /** The tier this deployment reads at. */
 export function currentTier(): string {
   const configured = (process.env.GEOTHRIVE_TIER ?? '').trim().toLowerCase();
-  return configured in TIER_RANK ? configured : BASIC;
+  return Object.hasOwn(TIER_RANK, configured) ? configured : BASIC;
 }

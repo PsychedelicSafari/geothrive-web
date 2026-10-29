@@ -5,7 +5,10 @@ import { gridHealth } from '@/lib/geothrive';
 export async function GET(): Promise<NextResponse> {
   try {
     return NextResponse.json(await gridHealth());
-  } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 502 });
+  } catch {
+    return NextResponse.json(
+      { error: 'Map data is temporarily unavailable.' },
+      { status: 502, headers: { 'Cache-Control': 'no-store' } },
+    );
   }
 }

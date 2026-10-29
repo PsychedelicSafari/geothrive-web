@@ -10,7 +10,7 @@ const TABS: Array<{ id: TabId; label: string; blurb: string }> = [
   {
     id: 'grid',
     label: 'The grid',
-    blurb: 'Every hexagon in South Africa, scored and ranked.',
+    blurb: 'Explore the South African H3 grid and available scores.',
   },
   {
     id: 'scanner',
@@ -24,12 +24,12 @@ const HERO: Record<TabId, { eyebrow: string; title: React.ReactNode; body: strin
     eyebrow: 'GeoThrive · The grid',
     title: (
       <>
-        34,000 hexagons.
+        See place. Understand connection.
         <br />
-        One question each.
+        One hexagon at a time.
       </>
     ),
-    body: 'South Africa cut into 42 square kilometre tiles, each one weighed against forty layers of conservation, water, terrain and land use. Deeper red means more pristine. Click any hexagon to see what is actually under it.',
+    body: 'Read the relationships between landscape, local activity and opportunity through a geographic lens. Explore South Africa’s H3 cells and inspect their available evidence. Deeper red indicates a higher weight score in the current model; it is separate from the legacy Mapping Kiosk’s green natural-capital grid.',
   },
   scanner: {
     eyebrow: 'GeoThrive · Field scanner',

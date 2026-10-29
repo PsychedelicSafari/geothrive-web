@@ -13,6 +13,7 @@ map and queries a PostGIS-backed cache (indexed by H3 hex grids) that wraps
 AfriGIS. The frontend talks to the cache, never the live AfriGIS API directly.
 
 - Package manager: Bun only. Never npm/pnpm/yarn.
+- API regression tests: `bun run --no-env-file test`; providers and database are mocked.
 - Lint: oxlint (no ESLint). Format: oxfmt. Typecheck: tsgo. Unused deps: knip.
 - Real env lives in `.env.local` (gitignored). See `.env.example` for the
   AfriGIS variables.

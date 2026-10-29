@@ -27,8 +27,10 @@ export async function GET(request: Request): Promise<NextResponse> {
       { ...data, truncated: data.count >= CAP },
       { headers: { 'Cache-Control': CACHE } },
     );
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ error: message }, { status: 502 });
+  } catch {
+    return NextResponse.json(
+      { error: 'Map data is temporarily unavailable.' },
+      { status: 502, headers: { 'Cache-Control': 'no-store' } },
+    );
   }
 }
